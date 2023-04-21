@@ -10,6 +10,8 @@ class Player(GameObject):
 
         self.speed = speed
 
+        self.is_move = False
+
     def move(self, keys):
         if keys[pygame.K_LEFT]:
             self.position.x -= self.speed
@@ -22,3 +24,4 @@ class Player(GameObject):
 
     def update(self):
         self.move(pygame.key.get_pressed())
+        self.rect.center = self.position

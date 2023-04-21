@@ -10,12 +10,8 @@ class GameObject(pg.sprite.Sprite):
         super().__init__()
         self.image = sprite
         self.position = position
-        self.rect = pygame.rect.Rect(
-            left=position.x,
-            top=position.y,
-            width=self.image.get_width(),
-            height=self.image.get_height()
-        )
+        self.rect = self.image.get_rect()
+        self.rect.center = position
 
     def update(self):
         pass

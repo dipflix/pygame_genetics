@@ -7,6 +7,7 @@ from pygame import Surface, Vector2
 
 from constants.assets import Assets
 from generators.generator import WorldGenerator
+from objects.camera import Camera
 from objects.player import Player
 from objects.world.chunk import Chunk
 
@@ -52,13 +53,13 @@ sprites = pg.sprite.Group()
 
 screen_center = Vector2(screen.get_width() // 2, screen.get_height() // 2)
 
-player = Player(position=Vector2(screen_center), sprite=ASSETS.player)
+player = Player(position=Vector2(screen_center), sprite=ASSETS.player, speed=5)
 
 
 class Game:
     def __init__(self):
         self.dt = 0
-        self.camera = pg.Rect(0, 0, SCREEN_SIZE[0], SCREEN_SIZE[1])
+        self.camera = Camera(screen_center, 1)
 
         self.chunk_size = CHUNK_SIZE
         self.world: list[Chunk] = []
@@ -77,7 +78,6 @@ class Game:
             self.update_events()
 
             self.update()
-            screen.blit(screen, (0, 0), self.camera)
 
             screen.blit(FPS_TEXT(), (10, 10))
             pg.display.flip()
@@ -87,10 +87,10 @@ class Game:
         pg.quit()
 
     def update(self):
-        camera_pos = player.position.lerp(screen_center, 0.5)
+        self.camera.followTo(player.position - screen_center)
 
         for sprite in sprites:
-            screen.blit(sprite.image, (sprite.rect.x - camera_pos.x, sprite.rect.y - camera_pos.y))
+            screen.blit(sprite.image, (sprite.rect.x - self.camera.position.x, sprite.rect.y - self.camera.position.y))
         player.update()
 
     def init_world(self):
