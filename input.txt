@@ -1,0 +1,6 @@
+alarm
+ready
+arrive
+finish
+arrive
+sleep
